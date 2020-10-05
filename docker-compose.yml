@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  python:
+    build: .
+    volumes:
+      - .:/usr/src/app
+  postgres:
+    image: postgres
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=bot
+      - "POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=C"
+  pgweb:
+    image: sosedoff/pgweb
+    environment:
+      - DATABASE_URL=postgres://root:root@postgres:5432/bot?sslmode=disable
+    ports:
+      - 8081:8081
+    depends_on:
+      - postgres
