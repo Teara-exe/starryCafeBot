@@ -4,6 +4,7 @@ from discord.ext import commands
 import discord
 from pprint import pprint
 
+
 class ReactionManager:
     """リアクションを監視するメッセージとそのレスポンスの管理クラス
 
@@ -166,7 +167,6 @@ class ManageReactionCog(commands.Cog):
             async for user in reaction.users():
                 # botのリアクションはスルー
                 if user.bot:
-                    pprint(user)
                     continue
                 r.user_list.append(user)
             resp.append(r)
@@ -241,8 +241,12 @@ class ManageReactionCog(commands.Cog):
         # ロールメンションした場合、そのロールのメンバを取得する
         role_mention_users: List[discord.Member] = []
         role_mentions: List[discord.Role] = message.role_mentions
+        print("role mention")
+        pprint(role_mentions)
         for role_mention in role_mentions:
             role_mention_users.extend(role_mention.members)
+            print("role members")
+            pprint(role_mention.members)
 
         for mention_user in mentions_users:
             if len(list(filter(lambda x: x.id == mention_user.id, resp))) == 0:
