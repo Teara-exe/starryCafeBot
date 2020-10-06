@@ -242,7 +242,7 @@ class ManageReactionCog(commands.Cog):
         role_mention_users: List[discord.Member] = []
         role_mentions: List[discord.Role] = message.role_mentions
         print("role mention")
-        pprint(role_mentions[0].members)
+        pprint(message.guild.get_role(role_mentions[0].id).members)
         for role_mention in role_mentions:
             role_mention_users.extend(role_mention.members)
             print("role members")
