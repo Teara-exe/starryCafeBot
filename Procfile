@@ -1,1 +1,1 @@
-discordbot: python main.py > Procfile
+discordbot: python main.py
