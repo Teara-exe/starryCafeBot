@@ -213,8 +213,8 @@ class ManageReactionCog(commands.Cog):
 
         return return_str
 
-    @staticmethod
-    def get_mention_users(message: discord.Message) -> List[discord.abc.User]:
+    #@staticmethod
+    async def get_mention_users(self, message: discord.Message) -> List[discord.abc.User]:
         """メンションしているユーザをすべて取得する
 
         Parameters
@@ -242,7 +242,7 @@ class ManageReactionCog(commands.Cog):
         role_mention_users: List[discord.Member] = []
         role_mentions: List[discord.Role] = message.role_mentions
         print("role mention")
-        pprint(message.guild.get_role(role_mentions[0].id).members)
+        pprint((await self.bot.fetch_guild(message.guild.id)).get_role(role_mentions[0].id).members)
         for role_mention in role_mentions:
             role_mention_users.extend(role_mention.members)
             print("role members")
