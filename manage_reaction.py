@@ -112,7 +112,7 @@ class ManageReactionCog(commands.Cog):
         # メッセージを更新してreactionの一覧を取得する
         user_reactions: List[UserReaction] = await self.get_reaction_user(message_manager)
         # ユーザの一覧を取得
-        mention_users: List[discord.abc.User] = self.get_mention_users(message_manager.manage_message)
+        mention_users: List[discord.abc.User] = await self.get_mention_users(message_manager.manage_message)
         pprint(mention_users)
 
         # 表示用メッセージの生成
