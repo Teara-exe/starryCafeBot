@@ -2,7 +2,7 @@ from typing import List, Union, Set
 
 from discord.ext import commands
 import discord
-
+from pprint import pprint
 
 class ReactionManager:
     """リアクションを監視するメッセージとそのレスポンスの管理クラス
@@ -92,6 +92,7 @@ class ManageReactionCog(commands.Cog):
         -------
 
         """
+
         # reactionをつけたものが管理対象の場合にのみ動作する
         message_manager: Union[ReactionManager, None] = None
         for reaction_manager in self.management:
@@ -99,6 +100,13 @@ class ManageReactionCog(commands.Cog):
                 message_manager = reaction_manager
         if message_manager is None:
             return
+
+        # 自分がリアクションした場合はスルー
+        if payload.user_id == message_manager.manage_message.guild.me.id:
+            return
+
+        # 該当のものにはリアクションを追加する
+        await message_manager.manage_message.add_reaction(payload.emoji)
 
         # メッセージを更新してreactionの一覧を取得する
         user_reactions: List[UserReaction] = await self.get_reaction_user(message_manager)
@@ -155,6 +163,9 @@ class ManageReactionCog(commands.Cog):
         for reaction in reactions:
             r = UserReaction(reaction)
             async for user in reaction.users():
+                # botのリアクションはスルー
+                if user.bot:
+                    continue
                 r.user_list.append(user)
             resp.append(r)
 
@@ -223,7 +234,7 @@ class ManageReactionCog(commands.Cog):
         # その他の場合は個別にメンションを集める
         resp: List[discord.abc.User] = []
         # 直メンションしたユーザを取得する
-        mentions_users: List[discord.abc.User] = message.mentions
+        mentions_users: List[discord.abc.User] = list(filter(lambda x: x.id != message.guild.me.id, message.mentions))
 
         # ロールメンションした場合、そのロールのメンバを取得する
         role_mention_users: List[discord.Member] = []
