@@ -112,6 +112,7 @@ class ManageReactionCog(commands.Cog):
         user_reactions: List[UserReaction] = await self.get_reaction_user(message_manager)
         # ユーザの一覧を取得
         mention_users: List[discord.abc.User] = self.get_mention_users(message_manager.manage_message)
+        pprint(mention_users)
 
         # 表示用メッセージの生成
         resp_str: str = self.create_response(user_reactions, mention_users)
@@ -165,6 +166,7 @@ class ManageReactionCog(commands.Cog):
             async for user in reaction.users():
                 # botのリアクションはスルー
                 if user.bot:
+                    pprint(user)
                     continue
                 r.user_list.append(user)
             resp.append(r)
@@ -245,9 +247,11 @@ class ManageReactionCog(commands.Cog):
         for mention_user in mentions_users:
             if len(list(filter(lambda x: x.id == mention_user.id, resp))) == 0:
                 resp.append(mention_user)
+                pprint(mention_user)
 
         for role_mention_user in role_mention_users:
             if len(list(filter(lambda x: x.id == role_mention_user.id, resp))) == 0:
                 resp.append(role_mention_user)
+                pprint(role_mention_user)
 
         return list(filter(lambda x: x.id != message.guild.me.id, resp))
